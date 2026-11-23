@@ -16,18 +16,18 @@ ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("JWT_ACCESS_TOKEN_EXPIRE_MINUTES", "
 
 
 def create_access_token(
-    user_id: int,
+    employee_id: int,
     role: int = 0,
     email: str | None = None,
-    username: str | None = None,
+    full_name: str | None = None,
     expires_delta: timedelta | None = None,
 ) -> str:
     now = datetime.now(timezone.utc)
     expire = now + (expires_delta if expires_delta else timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
 
     payload = {
-        "sub": str(user_id),
-        "user_id": int(user_id),
+        "sub": str(employee_id),
+        "employee_id": int(employee_id),
         "role": int(role),
         "type": "access",
         "iat": now,
@@ -35,8 +35,8 @@ def create_access_token(
     }
     if email: 
         payload["email"] = email
-    if username:
-        payload["username"] = username
+    if full_name:
+        payload["full_name"] = full_name
 
     return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
