@@ -3,7 +3,9 @@ import os
 from app import model 
 from app.database import engine, Base
 import uvicorn
+from fastapi import FastAPI
 
+app = FastAPI()
 
 try:
     with engine.connect() as connection:
