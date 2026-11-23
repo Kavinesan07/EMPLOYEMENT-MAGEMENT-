@@ -1,9 +1,9 @@
 import os
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+import jwt
 from dotenv import load_dotenv
 from fastapi import HTTPException, status
-import jwt
 
 # Locate backend root .env
 BASE_DIR = Path(__file__).resolve().parents[2]
@@ -17,7 +17,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("JWT_ACCESS_TOKEN_EXPIRE_MINUTES", "
 
 def create_access_token(
     employee_id: int,
-    role: int = 0,
+    role: str = "Employee",
     email: str | None = None,
     full_name: str | None = None,
     expires_delta: timedelta | None = None,
@@ -28,12 +28,12 @@ def create_access_token(
     payload = {
         "sub": str(employee_id),
         "employee_id": int(employee_id),
-        "role": int(role),
+        "role": str(role),
         "type": "access",
         "iat": now,
         "exp": expire,
     }
-    if email: 
+    if email:
         payload["email"] = email
     if full_name:
         payload["full_name"] = full_name
